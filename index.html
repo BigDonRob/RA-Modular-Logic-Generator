@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modular Logic Generator</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+  <h1>Modular Logic Generator</h1>
+  <p class="subtitle">Build achievement conditions with targeted expansion.</p>
+  
+  <div class="input-section">
+    <div class="section-title">Base Logic String</div>
+    <textarea id="baseLogic" rows="4" placeholder="Enter base logic string (e.g., I:0xW001234_I:0xW000120_I:0xW000080_A:0xM020_N:0xH020>=15)">I:0xW001234_I:0xW000120_I:0xW000080_A:0xM020_N:0xH020>=15</textarea>
+    <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+      <button class="secondary-btn" onclick="updateGuiFromText()">Update GUI</button>
+      <button class="copy-btn" onclick="copyToClipboard(document.getElementById('baseLogic').value)">Copy to Clipboard</button>
+    </div>
+  </div>
+  
+  <div class="input-section">
+    <div class="section-title">Build Conditions:</div>
+    <div class="bitfield-headers">
+      <div>Flag</div>
+      <div>Type</div>
+      <div>Size</div>
+      <div>Mem/Val</div>
+      <div>Cmp</div>
+      <div>Type</div>
+      <div>Size</div>
+      <div>Mem/Val</div>
+      <div>Hits</div>
+      <div></div>
+    </div>
+    <div id="bitfieldConditionsList"></div>
+    <button class="add-condition-btn-small" onclick="addBitfieldCondition()">+ Add</button>
+    <div class="button-group">
+      <button class="clear-btn" onclick="clearBitfieldConditions()">Clear All</button>
+    </div>
+    <div style="margin-top: 2rem; display: flex; align-items: center; gap: 1rem;">
+      <button class="generate-btn" onclick="generateBitfieldLogic()">Generate Logic</button>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span>Optimize:</span>
+        <div class="expansion-tabs" style="display: flex; gap: 0.5rem; margin-bottom: 0;">
+          <button id="optimizeRR" class="tab-btn active" onclick="toggleOptimize('rr')">R/R Collapse</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="custom-panel-controller.js"></script>
+<script type="module" src="custom-toggles.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
