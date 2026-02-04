@@ -302,7 +302,7 @@ function syncBitfieldFromText() {
   }));
   bitfieldExpansions = {};
 
-  // Auto-link Add Address flags
+  // Auto-link Add Address, Add Source, Sub Source, And Next, and Or Next flags
   autoLinkAddressFlags();
 
   renderBitfieldConditions();
@@ -2542,12 +2542,12 @@ function applyAndOrNextCheck(condition, expandedLines) {
 }
 
 function autoLinkAddressFlags() {
-  // Find all Add Address flags and link them from top to bottom
-  const addAddressLines = bitfieldConditions
+  // Find all linkable flags and link them from top to bottom
+  const linkableLines = bitfieldConditions
     .map((c, idx) => ({ condition: c, index: idx }))
-    .filter(({ condition }) => condition.flag === 'I:');
+    .filter(({ condition }) => ['I:', 'A:', 'B:', 'N:', 'O:'].includes(condition.flag));
 
-  addAddressLines.forEach(({ condition, index }) => {
+  linkableLines.forEach(({ condition, index }) => {
     // Only link if this line is a group leader and can link
     if (isGroupLeader(condition) && canLinkCondition(condition.lineId)) {
       linkCondition(condition.lineId);
