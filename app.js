@@ -1,8 +1,3 @@
-// ============================================================================
-// MAIN APPLICATION ENTRY POINT
-// Updated: 2025-02-02 02:39:00 - Fixed badge generation groups
-// ============================================================================
-
 console.log('🚀 app.js loading - v3');
 
 import { 
@@ -599,6 +594,24 @@ function expandCondition(lineId) {
     const hasComparison = line.cmp && line.cmp.trim() !== '';
     const rightExpandable =
       !['Recall'].includes(line.compareType) && hasComparison;
+    const leftHasSize = [
+      'Mem',
+      'Delta',
+      'Prior',
+      'Invert',
+      'BCD',
+      'Float',
+    ].includes(line.type);
+    const rightHasSize = [
+      'Mem',
+      'Delta',
+      'Prior',
+      'Invert',
+      'BCD',
+      'Float',
+    ].includes(line.compareType);
+    const bothExpandable =
+      leftHasSize && rightHasSize && line.size === line.compareSize;
 
     html += '<div class="expansion-tabs">';
     html += `<button class="tab-btn ${lineConfig.activeTab === 'left' ? 'active' : ''}" 
@@ -607,6 +620,9 @@ function expandCondition(lineId) {
     html += `<button class="tab-btn ${lineConfig.activeTab === 'right' ? 'active' : ''}" 
       onclick="window.updateLineConfig(${lineId}, ${idx}, 'activeTab', 'right'); window.expandCondition(${lineId});" 
       ${!rightExpandable || lineConfig.customized ? 'disabled' : ''}>Right</button>`;
+    html += `<button class="tab-btn ${lineConfig.activeTab === 'both' ? 'active' : ''}" 
+      onclick="window.updateLineConfig(${lineId}, ${idx}, 'activeTab', 'both'); window.expandCondition(${lineId});" 
+      ${!bothExpandable || lineConfig.customized ? 'disabled' : ''}>Both</button>`;
     html += '</div>';
 
     // Input fields
