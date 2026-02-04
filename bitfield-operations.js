@@ -186,7 +186,7 @@ export function updateBitfieldCondition(
  * @param {Array} bitfieldConditions - Array of conditions (modified in place)
  * @param {Map} bitfieldExpansions - Expansion map (modified in place)
  * @param {Array} parsed - Parsed conditions from text
- * @param {Function} autoLinkAddressFlags - Function to auto-link address flags
+ * @param {Function} autoLinkAddressFlags - Function to auto-link address and operand flags
  */
 export function syncBitfieldFromText(
   bitfieldConditions,
@@ -214,6 +214,6 @@ export function syncBitfieldFromText(
   
   bitfieldExpansions.clear();
 
-  // Auto-link Add Address flags
+  // Auto-link Add Address, Add Source, Sub Source, And Next, and Or Next flags
   autoLinkAddressFlags();
 }
