@@ -237,17 +237,17 @@ export function canLinkCondition(bitfieldConditions, lineId) {
 }
 
 /**
- * Auto-links Add Address flags from top to bottom
+ * Auto-links Add Address, Add Source, Sub Source, And Next, and Or Next flags from top to bottom
  * @param {Array} bitfieldConditions - Array of all conditions (modified in place)
  * @param {Map} linkGroupColors - Map of group colors (modified in place)
  */
 export function autoLinkAddressFlags(bitfieldConditions, linkGroupColors) {
-  // Find all Add Address flags and link them from top to bottom
-  const addAddressLines = bitfieldConditions
+  // Find all linkable flags and link them from top to bottom
+  const linkableLines = bitfieldConditions
     .map((c, idx) => ({ condition: c, index: idx }))
-    .filter(({ condition }) => condition.flag === 'I:');
+    .filter(({ condition }) => ['I:', 'A:', 'B:', 'N:', 'O:'].includes(condition.flag));
 
-  addAddressLines.forEach(({ condition }) => {
+  linkableLines.forEach(({ condition }) => {
     // Only link if this line is a group leader and can link
     if (isGroupLeader(bitfieldConditions, condition) && canLinkCondition(bitfieldConditions, condition.lineId)) {
       linkCondition(bitfieldConditions, linkGroupColors, condition.lineId);
