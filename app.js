@@ -462,20 +462,25 @@ function updateBitfieldConditionWrapper(lineId, field, value) {
     recomputeExpandState,
     expandCondition
   );
-  // Render directly without re-parsing from textarea to preserve manual edits
-  renderBitfieldConditions(
-    bitfieldConditions,
-    bitfieldExpansions,
-    linkGroupColors,
-    (lineId) => linkCondition(bitfieldConditions, linkGroupColors, lineId),
-    (lineId) => unlinkCondition(bitfieldConditions, lineId),
-    (lineId) => canLinkConditionUtil(bitfieldConditions, lineId),
-    (lineId) => addConditionAtIndex(bitfieldConditions, lineId),
-    (lineId) => copyCondition(bitfieldConditions, lineId),
-    (lineId) => removeBitfieldCondition(bitfieldConditions, bitfieldExpansions, linkGroupColors, lineId),
-    expandCondition,
-    reopenExpansion
-  );
+  
+  // Only render in-place for fields that affect UI structure
+  const uiAffectingFields = ['flag', 'type', 'cmp'];
+  if (uiAffectingFields.includes(field)) {
+    // Render directly without re-parsing from textarea to preserve manual edits
+    renderBitfieldConditions(
+      bitfieldConditions,
+      bitfieldExpansions,
+      linkGroupColors,
+      (lineId) => linkCondition(bitfieldConditions, linkGroupColors, lineId),
+      (lineId) => unlinkCondition(bitfieldConditions, lineId),
+      (lineId) => canLinkConditionUtil(bitfieldConditions, lineId),
+      (lineId) => addConditionAtIndex(bitfieldConditions, lineId),
+      (lineId) => copyCondition(bitfieldConditions, lineId),
+      (lineId) => removeBitfieldCondition(bitfieldConditions, bitfieldExpansions, linkGroupColors, lineId),
+      expandCondition,
+      reopenExpansion
+    );
+  }
 }
 
 // Group Management
