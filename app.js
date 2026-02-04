@@ -1,3 +1,8 @@
+// ============================================================================
+// MAIN APPLICATION ENTRY POINT
+// Updated: 2025-02-02 02:39:00 - Fixed badge generation groups
+// ============================================================================
+
 console.log('🚀 app.js loading - v3');
 
 import { 
@@ -456,6 +461,20 @@ function updateBitfieldConditionWrapper(lineId, field, value) {
     value,
     recomputeExpandState,
     expandCondition
+  );
+  // Render directly without re-parsing from textarea to preserve manual edits
+  renderBitfieldConditions(
+    bitfieldConditions,
+    bitfieldExpansions,
+    linkGroupColors,
+    (lineId) => linkCondition(bitfieldConditions, linkGroupColors, lineId),
+    (lineId) => unlinkCondition(bitfieldConditions, lineId),
+    (lineId) => canLinkConditionUtil(bitfieldConditions, lineId),
+    (lineId) => addConditionAtIndex(bitfieldConditions, lineId),
+    (lineId) => copyCondition(bitfieldConditions, lineId),
+    (lineId) => removeBitfieldCondition(bitfieldConditions, bitfieldExpansions, linkGroupColors, lineId),
+    expandCondition,
+    reopenExpansion
   );
 }
 
