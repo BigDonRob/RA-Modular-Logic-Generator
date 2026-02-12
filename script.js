@@ -2175,7 +2175,9 @@ function createConditionLine(condition, address, size, bit, expansion) {
   const isOperandFlag = ['A:', 'B:', 'I:', 'K:'].includes(condition.flag);
   if (
     !isOperandFlag ||
-    (isOperandFlag && condition.cmp && condition.cmp !== '')
+    (isOperandFlag && condition.cmp && condition.cmp !== '') ||
+    (isOperandFlag && condition.compareType !== 'Value') ||
+    (isOperandFlag && condition.compareType === 'Value' && condition.value !== '0')
   ) {
     line += condition.cmp || '=';
 
@@ -2274,7 +2276,9 @@ function createArithmeticExpansionLine(
   const isOperandFlag = ['A:', 'B:', 'I:', 'K:'].includes(condition.flag);
   if (
     !isOperandFlag ||
-    (isOperandFlag && condition.cmp && condition.cmp !== '')
+    (isOperandFlag && condition.cmp && condition.cmp !== '') ||
+    (isOperandFlag && condition.compareType !== 'Value') ||
+    (isOperandFlag && condition.compareType === 'Value' && condition.value !== '0')
   ) {
     line += condition.cmp || '=';
 
