@@ -611,7 +611,7 @@ function expandCondition(lineId) {
   groupLines.forEach((line, idx) => {
     const lineConfig = expansion.lineConfigs[idx];
     html += '<div class="expansion-line-config">';
-    html += `<div class="expansion-line-header">Line ${line.lineId}: ${line.flag} ${line.type} ${line.size} ${line.memory}</div>`;
+    html += `<div class="expansion-line-header">Line ${line.lineId}: ${formatConditionDisplay(line)}</div>`;
 
     // Tab selection
     const leftExpandable = !['Recall'].includes(line.type);
@@ -979,7 +979,8 @@ function confirmExpansionWrapper(lineId) {
           console.log('Added', customLines.length, 'custom lines');
         } else if (
           lineConfig.arithmeticIncrement &&
-          lineConfig.arithmeticIncrement.trim() !== ''
+          lineConfig.arithmeticIncrement.trim() !== '' &&
+          (lineConfig.activeTab !== 'left' || !line.cmp)  // Allow arithmetic for non-left tabs or operands without comparison
         ) {
           // Use arithmetic expansion with proper size prefix format
           let increment = 0;
@@ -998,7 +999,28 @@ function confirmExpansionWrapper(lineId) {
           const newAddr = (baseAddr + increment * groupIdx).toString(16).toUpperCase().padStart(4, '0');
           const sizePrefix = sizeMapForText[line.size] || '';
           const formattedAddr = `0x${sizePrefix}${newAddr}`;
-          const lineText = `${line.flag}${formattedAddr}`;
+          
+          let lineText = `${line.flag}${formattedAddr}`;
+          
+          // Handle right side if there's a comparison
+          if (line.cmp && line.compareType && line.value) {
+            let rightAddr = line.value;
+            
+            // Apply increment to right side based on activeTab
+            if (lineConfig.activeTab === 'right' || lineConfig.activeTab === 'both') {
+              const baseRightAddr = parseInt(line.value.replace('0x', ''), 16);
+              const newRightAddr = (baseRightAddr + increment * groupIdx).toString(16).toUpperCase().padStart(4, '0');
+              const rightSizePrefix = sizeMapForText[line.compareSize] || '';
+              rightAddr = `0x${rightSizePrefix}${newRightAddr}`;
+            } else if (lineConfig.activeTab === 'left') {
+              // Keep original right side
+              const rightSizePrefix = sizeMapForText[line.compareSize] || '';
+              rightAddr = `0x${rightSizePrefix}${line.value.replace('0x', '')}`;
+            }
+            
+            lineText += `${line.cmp}${rightAddr}`;
+          }
+          
           groupLinesToAdd.push(lineText);
           console.log('Added arithmetic line:', lineText);
         } else {
