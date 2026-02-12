@@ -314,6 +314,7 @@ export function confirmExpansion(
  */
 export function convertBitfieldConditionToText(condition) {
   let text = '';
+  const isOperandFlag = OPERAND_FLAGS.includes(condition.flag);
 
   if (condition.flag) text += condition.flag;
 
@@ -342,8 +343,13 @@ export function convertBitfieldConditionToText(condition) {
   }
 
   // Add comparison
-  if (condition.cmp) {
-    text += condition.cmp;
+  if (
+    !isOperandFlag ||
+    (isOperandFlag && condition.cmp && condition.cmp !== '') ||
+    (isOperandFlag && condition.compareType !== 'Value') ||
+    (isOperandFlag && condition.compareType === 'Value' && condition.value !== '0')
+  ) {
+    text += condition.cmp || '=';
 
     // Add right side
     if (condition.compareType === 'Recall') {
